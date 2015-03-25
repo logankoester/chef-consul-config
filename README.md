@@ -1,35 +1,38 @@
-# haproxy-consul-template cookbook
+# consul-config cookbook
 
-Update `haproxy.conf` and reload it based on Consul events using [Consul Template](https://github.com/hashicorp/consul-template).
+A collection of Consul templates for configuring various services.
 
-[![Build Status](http://ci.ldk.io/logankoester/chef-haproxy-consul-template/badge)](http://ci.ldk.io/logankoester/chef-haproxy-consul-template/)
+Update configuration files based on Consul events using [Consul Template](https://github.com/hashicorp/consul-template).
+
+[![Build Status](http://ci.ldk.io/logankoester/chef-consul-config/badge)](http://ci.ldk.io/logankoester/chef-consul-config/)
 [![Gittip](http://img.shields.io/gittip/logankoester.png)](https://www.gittip.com/logankoester/)
-
-## Overview
-
-
 
 ## Installation
 
-Using [Berkshelf](http://berkshelf.com/), add the `haproxy-consul-template` cookbook to your Berksfile.
+Using [Berkshelf](http://berkshelf.com/), add the `consul-config` cookbook to your Berksfile.
 
 ```ruby
-cookbook 'haproxy-consul-template', github: 'logankoester/chef-haproxy-consul-template', branch: 'master'
+cookbook 'consul-config', github: 'logankoester/chef-consul-config', branch: 'master'
 ```
 Then run `berks` to install it.
 
 ## Usage
 
-TODO: Include usage patterns of any providers or recipes.
+### consul-config::default
 
-### haproxy-consul-template::default
+Writes the configuration file for `consul-template` service itself. You always want at least this one in your run list.
 
-Include `haproxy-consul-template` in your run_list.
+### consul-config::haproxy
+
+Writes `/etc/haproxy/haproxy.cfg` file for the [HAProxy](http://www.haproxy.org) load balancer.
+
+Include `consul-config::haproxy` in your run_list.
 
 ```json
 {
   "run_list": [
-    "recipe[haproxy-consul-template::default]"
+    "recipe[consul-config]",
+    "recipe[consul-config::haproxy]"
   ]
 }
 ```
@@ -38,8 +41,8 @@ Include `haproxy-consul-template` in your run_list.
 
 This cookbook uses the [Foodcritic](http://www.foodcritic.io/) linter and [ChefSpec](http://sethvargo.github.io/chefspec/) for unit testing.
 
-1. `git clone git@github.com:logankoester/chef-haproxy-consul-template.git`
-2. `cd chef-haproxy-consul-template`
+1. `git clone git@github.com:logankoester/chef-consul-config.git`
+2. `cd chef-consul-config`
 3. `bundle install`
 4. `bundle exec rake`
 

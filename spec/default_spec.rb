@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'haproxy-consul-template::default' do
+describe 'consul-config::default' do
   before do
     Fauxhai.mock(path: 'spec/fixtures/arch.json') do |node|
     end
