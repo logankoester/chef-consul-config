@@ -1,29 +1,23 @@
 global
   daemon
-  maxconn {{key "service/haproxy/maxconn"}}
+  maxconn {{key "haproxy/maxconn"}}
 
 defaults
-  mode {{key "service/haproxy/mode"}}{{range ls "service/haproxy/timeouts"}}
+  mode {{key "haproxy/mode"}}{{range ls "haproxy/timeouts"}}
   timeout {{.Key}} {{.Value}}{{end}}
 
 frontend http-in
-  bind *:80{{range service}}
-  acl is_{{{{.Node}} {{end}}
-  acl is_site1 hdr_end(host) -i domain1.se
-  use_backend site1 if is_site1
-
-frontend http-in
-  bind *:80{{range services}}
-    acl is_{{.Name}} hdr_end(host) -i {{key "service/$Name/cname" }}
-    use_backend {{.Name}} if is_{{.Name}}{{end}}
+  mode http
+  bind *:80{{range $service := services}}
+    acl is_{{.Name}} hdr_end(host) -i {{range ls .Name}}{{if eq .Key "cnames"}}{{.Value}} {{end}}{{end}}
+    use_backend {{.Name}} if is_{{.Name}}
+{{end}}
 
 {{range services}}backend {{.Name}}
+  mode http
   balance roundrobin
   option httpclose
   option forwardfor
-  {{range service $Name}}
-  server {{.Node}} {{.Address}}:{{.Port}}{{end}}
-
-listen http-in
-  bind *:8000{{range service "release.webapp"}}
-  server {{.Node}} {{.Address}}:{{.Port}}{{end}}
+  {{range service .Name}}server {{.Node}} {{.Address}}:{{.Port}}
+  {{end}}
+{{end}}
