@@ -8,16 +8,16 @@ defaults
 
 frontend http-in
   mode http
-  bind *:80{{range $service := services}}
+  bind *:80{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "http"}}{{range service $service "passing"}}
     acl is_{{.Name}} hdr_end(host) -i {{range ls .Name}}{{if eq .Key "cnames"}}{{.Value}} {{end}}{{end}}
     use_backend {{.Name}} if is_{{.Name}}
-{{end}}
+{{end}}{{end}}{{end}}{{end}}
 
-{{range services}}backend {{.Name}}
+{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "http"}}{{range service $service "passing"}}backend {{.Name}}
   mode http
   balance roundrobin
   option httpclose
   option forwardfor
   {{range service .Name}}server {{.Node}} {{.Address}}:{{.Port}}
   {{end}}
-{{end}}
+{{end}}{{end}}{{end}}{{end}}
