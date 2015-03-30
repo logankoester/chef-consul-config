@@ -5,19 +5,33 @@ global
 defaults
   mode {{key "haproxy/mode"}}{{range ls "haproxy/timeouts"}}
   timeout {{.Key}} {{.Value}}{{end}}
+  option http-server-close
 
 frontend http-in
   mode http
-  bind *:80{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "http"}}{{range service $service "passing"}}
-    acl is_{{.Name}} hdr_end(host) -i {{range ls .Name}}{{if eq .Key "cnames"}}{{.Value}} {{end}}{{end}}
-    use_backend {{.Name}} if is_{{.Name}}
-{{end}}{{end}}{{end}}{{end}}
+  bind *:80{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "http"}}{{range service $service}}
+  acl is_{{.Name}} hdr_end(host) -i {{range ls .Name}}{{if eq .Key "cnames"}}{{.Value}} {{end}}{{end}}
+  use_backend {{.Name}} if is_{{.Name}}{{end}}{{end}}{{end}}{{end}}
 
-{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "http"}}{{range service $service "passing"}}backend {{.Name}}
+frontend https-in
+  mode tcp
+  option tcplog
+  reqadd X-Forwarded-Proto:\ https
+  bind *:443{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "https"}}{{range service $service}}
+  acl is_{{.Name}} req_ssl_sni -i {{range ls .Name}}{{if eq .Key "cnames"}}{{.Value}} {{end}}{{end}}
+  use_backend {{.Name}} if is_{{.Name}}{{end}}{{end}}{{end}}{{end}}
+
+{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "http"}}{{range service $service}}backend {{.Name}}
   mode http
-  balance roundrobin
   option httpclose
   option forwardfor
-  {{range service .Name}}server {{.Node}} {{.Address}}:{{.Port}}
-  {{end}}
-{{end}}{{end}}{{end}}{{end}}
+  {{range service .Name "passing"}}server {{.Node}} {{.Address}}:{{.Port}}
+  {{end}}{{end}}{{end}}{{end}}{{end}}
+
+{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "https"}}{{range service $service}}backend {{.Name}}
+  mode tcp
+  option httpclose
+  option ssl-hello-chk
+  option forwardfor
+  {{range service .Name "passing"}}server {{.Node}} {{.Address}}:{{.Port}}
+  {{end}}{{end}}{{end}}{{end}}{{end}}
