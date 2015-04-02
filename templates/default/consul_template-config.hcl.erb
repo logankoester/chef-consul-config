@@ -16,5 +16,5 @@ ssl {
 
 syslog {
   enabled = <%= @config['syslog'] ? 'true' : 'false' %>
-  facility = <%= @config['syslog-facility'] %>
+  facility = "<%= @config['syslog-facility'] %>"
 }
