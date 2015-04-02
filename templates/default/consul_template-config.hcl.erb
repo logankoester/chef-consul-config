@@ -1,20 +1,20 @@
 consul = "<%= @config['consul'] %>"
-<% if @config['token'] %>token = "<%= @config['token'] %>"<% end %>
+token = "<%= @config['token'] %>"
 retry = "<%= @config['retry'] %>"
-max_stale = "<%= @config['max-stale'] %>"
+max_stale = "<%= @config['max_stale'] %>"
 
 auth {
-  enabled = <%= @config['auth'].empty? ? 'false' : 'true' %>
-  <% if @config['auth'] %>username = "<%= @config['auth']['username'] %>"<% end %>
-  <% if @config['auth'] %>password = "<%= @config['auth']['password'] %>"<% end %>
+  enabled = <%= @config['auth']['enabled'] %>
+  username = "<%= @config['auth']['username'] %>"
+  password = "<%= @config['auth']['password'] %>"
 }
 
 ssl {
-  enabled = <%= @config['ssl'] ? 'true' : 'false' %>
-  verify = <%= @config['ssl-verify'] ? 'true' : 'false' %>
+  enabled = <%= @config['ssl']['enabled'] %>
+  verify = <%= @config['ssl']['verify'] %>
 }
 
 syslog {
-  enabled = <%= @config['syslog'] ? 'true' : 'false' %>
-  facility = "<%= @config['syslog-facility'] %>"
+  enabled = <%= @config['syslog']['enabled'] %>
+  facility = "<%= @config['syslog']['facility'] %>"
 }
