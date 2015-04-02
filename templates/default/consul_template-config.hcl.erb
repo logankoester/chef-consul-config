@@ -1,20 +1,20 @@
-consul = "127.0.0.1:8500"
-// token = "abcd1234"
-retry = "10s"
-max_stale = "10m"
+consul = "<%= @config['consul'] %>"
+<% if @config['token'] %>token = "<%= @config['token'] %>"<% end %>
+retry = "<%= @config['retry'] %>"
+max_stale = "<%= @config['max-stale'] %>"
 
 auth {
-  enabled = false
-  // username = "test"
-  // password = "test"
+  enabled = <%= @config['auth'].empty? ? 'false' : 'true' %>
+  <% if @config['auth'] %>username = "<%= @config['auth']['username'] %>"<% end %>
+  <% if @config['auth'] %>password = "<%= @config['auth']['password'] %>"<% end %>
 }
 
 ssl {
-  enabled = false
-  verify = false
+  enabled = <%= @config['ssl'] ? 'true' : 'false' %>
+  verify = <%= @config['ssl-verify'] ? 'true' : 'false' %>
 }
 
 syslog {
-  enabled = true
-  facility = "LOCAL0"
+  enabled = <%= @config['syslog'] ? 'true' : 'false' %>
+  facility = <%= @config['syslog']['facility'] %>
 }
