@@ -26,12 +26,12 @@ frontend https-in
   option httpclose
   option forwardfor
   {{range service .Name "passing"}}server {{.Node}} {{.Address}}:{{.Port}}
-  {{end}}{{end}}{{end}}{{end}}{{end}}
-
-{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "https"}}{{range service $service}}backend {{.Name}}
+  {{end}}
+{{end}}{{end}}{{end}}{{end}}{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "https"}}{{range service $service}}backend {{.Name}}
   mode tcp
   option httpclose
   option ssl-hello-chk
   option forwardfor
   {{range service .Name "passing"}}server {{.Node}} {{.Address}}:{{.Port}}
-  {{end}}{{end}}{{end}}{{end}}{{end}}
+  {{end}}
+{{end}}{{end}}{{end}}{{end}}
