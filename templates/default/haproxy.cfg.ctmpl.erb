@@ -16,6 +16,7 @@ frontend http-in
 frontend https-in
   mode tcp
   option tcplog
+  option socket-stats
   reqadd X-Forwarded-Proto:\ https
   bind *:443{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "https"}}{{range service $service}}
   acl is_{{.Name}} req_ssl_sni -i {{range ls .Name}}{{if eq .Key "cnames"}}{{.Value}} {{end}}{{end}}
