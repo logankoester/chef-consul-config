@@ -1,20 +1,24 @@
 default['consul_template']['config'] = {
-  auth: {
-    enabled: false,
-    username: '',
-    password: ''
-  }, 
-  consul: '127.0.0.1:8500',
-  'max_stale': 0,
-  'ssl': {
-    'enabled': false,
-    'verify': true
+  :auth => {
+    :enabled => false,
+    :username => '',
+    :password => ''
   },
-  'syslog': {
-    'enabled': false,
-    'facility': 'LOCAL0'
+
+  :consul => '127.0.0.1:8500',
+  :max_stale => 0,
+
+  :ssl => {
+    :enabled => false,
+    :verify => true
   },
-  'token': '',
-  'wait': '',
-  'retry': '5s'
+
+  :syslog => {
+    :enabled => false,
+    :facility => 'LOCAL0'
+  },
+
+  :token => '',
+  :wait => '',
+  :retry => '5s'
 }
