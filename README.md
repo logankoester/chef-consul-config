@@ -50,4 +50,4 @@ This will run all of the tests once. While developing, run `bundle exec guard st
 
 ## Author
 
-Copyright (c) 2015 [Logan Koester](http://logankoester.com). Released under the mit license. See `LICENSE` for details.
+Copyright (c) 2015-2016 [Logan Koester](http://logankoester.com). Released under the mit license. See `LICENSE` for details.
