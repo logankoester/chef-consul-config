@@ -1,10 +1,2 @@
-template File.join(node['consul_template']['config_dir'], 'config.hcl') do
-  user node['consul_template']['service_user']
-  group  node['consul_template']['service_group']
-  source 'consul_template-config.hcl.erb'
-  variables(
-    config: node['consul_template']['config']
-  )
-  action :create
-  notifies :reload, 'service[consul-template]', :immediately
-end
+include_recipe 'consul-config::certificates'
+include_recipe 'consul-config::consul_template'
