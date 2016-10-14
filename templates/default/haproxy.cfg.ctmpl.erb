@@ -1,6 +1,7 @@
 global
   daemon
   maxconn {{key "haproxy/maxconn"}}
+  lua-load /etc/haproxy/acme-http01-webroot.lua
 
 defaults
   mode {{key "haproxy/mode"}}{{range ls "haproxy/timeouts"}}
@@ -9,7 +10,11 @@ defaults
 
 frontend http-in
   mode http
-  bind *:80{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "http"}}{{range service $service}}
+  bind *:80
+  
+  acl url_acme_http01 path_beg /.well-known/acme-challenge/
+  http-request use-service lua.acme-http01 if METH_GET url_acme_http01{{range services}}{{$service:=.Name}}{{range .Tags}}{{if eq . "http"}}{{range service $service}}
+
   acl is_{{.Name}} hdr_end(host) -i {{range ls .Name}}{{if eq .Key "cnames"}}{{.Value}} {{end}}{{end}}
   use_backend {{.Name}} if is_{{.Name}}{{end}}{{end}}{{end}}{{end}}
 

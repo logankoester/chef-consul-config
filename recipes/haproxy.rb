@@ -1,3 +1,11 @@
+template '/etc/haproxy/acme-http01-webroot.lua' do
+  user node['consul_template']['service_user']
+  group  node['consul_template']['service_group']
+  source 'acme-http01-webroot.lua.erb'
+  action :create
+  notifies :reload, 'service[haproxy]', :delayed
+end
+
 template '/etc/haproxy/haproxy.cfg.ctmpl' do
   user node['consul_template']['service_user']
   group  node['consul_template']['service_group']
