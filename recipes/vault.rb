@@ -24,4 +24,5 @@ chef_vault_pki 'vault' do
   private_mode 0600
   bundle_ca node['consul-config']['vault']['tls']['bundle_ca']
   subject_alternate_names node['consul-config']['vault']['tls']['subject_alternate_names']
+  action :delete
 end
