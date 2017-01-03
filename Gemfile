@@ -5,6 +5,7 @@ gem 'rspec'
 gem 'chefspec'
 gem 'rubocop'
 gem 'foodcritic'
+gem 'chef-vault-pki'
 
 gem 'guard'
 gem 'guard-rspec'

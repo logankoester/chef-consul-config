@@ -44,3 +44,6 @@ default['consul_template']['config'] = {
   :wait => '',
   :retry => '5s'
 }
+
+default['consul-config']['vault']['tls']['ca'] = 'chef_vault_pki_ca'
+default['consul-config']['vault']['tls']['bundle_ca'] = false
