@@ -47,3 +47,4 @@ default['consul_template']['config'] = {
 
 default['consul-config']['vault']['tls']['ca'] = 'chef_vault_pki_ca'
 default['consul-config']['vault']['tls']['bundle_ca'] = false
+default['consul-config']['vault']['tls']['subject_alternate_names'] = ['IP:127.0.0.1']
