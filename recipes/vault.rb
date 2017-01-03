@@ -6,6 +6,15 @@
 
 tls_cert_dir = Pathname.new(node['hashicorp-vault']['config']['tls_cert_file']).dirname.to_s
 
+directory tls_cert_dir do
+  owner 'vault'
+  group 'vault'
+  mode 0644
+  action :create
+  ignore_failure true
+  recursive true
+end
+
 chef_vault_pki "consul_#{node.name}" do
   ca node['consul-config']['vault']['tls']['ca']
   path tls_cert_dir
