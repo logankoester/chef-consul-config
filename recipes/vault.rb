@@ -15,7 +15,7 @@ directory tls_cert_dir do
   recursive true
 end
 
-chef_vault_pki "consul_#{node.name}" do
+chef_vault_pki 'vault' do
   ca node['consul-config']['vault']['tls']['ca']
   path tls_cert_dir
   owner 'vault'
