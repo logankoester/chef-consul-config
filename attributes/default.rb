@@ -41,7 +41,10 @@ default['consul_template']['config'] = {
   },
 
   :token => '',
-  :wait => '',
+  :wait => {
+    :min => '5s',
+    :max => '10s'
+  },
   :retry => '5s'
 }
 
